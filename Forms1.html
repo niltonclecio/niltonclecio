@@ -1,0 +1,132 @@
+<html><head><base href="mailto:contato@personalmap.com.br/">
+<title>Formulário de Priorização</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-top: 20px;
+    }
+    #form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #options {
+        list-style-type: none;
+        padding: 0;
+    }
+    #options li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #e9e9e9;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #options li:hover {
+        background-color: #d4d4d4;
+    }
+    #selected-options {
+        margin-top: 20px;
+    }
+    #submit-btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #submit-btn:hover {
+        background-color: #45a049;
+    }
+    #submit-btn:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+</style>
+</head>
+<body>
+<h1>Formulário de Priorização</h1>
+
+<div id="form-container">
+    <p>Escolha as opções em ordem de importância. As opções selecionadas serão removidas da lista.</p>
+    
+    <ul id="options">
+        <li data-value="1">Opção 1</li>
+        <li data-value="2">Opção 2</li>
+        <li data-value="3">Opção 3</li>
+        <li data-value="4">Opção 4</li>
+        <li data-value="5">Opção 5</li>
+        <li data-value="6">Opção 6</li>
+        <li data-value="7">Opção 7</li>
+        <li data-value="8">Opção 8</li>
+        <li data-value="9">Opção 9</li>
+        <li data-value="10">Opção 10</li>
+        <li data-value="11">Opção 11</li>
+        <li data-value="12">Opção 12</li>
+    </ul>
+    
+    <div id="selected-options">
+        <h3>Suas escolhas em ordem de prioridade:</h3>
+        <ol id="priority-list"></ol>
+    </div>
+    
+    <button id="submit-btn" disabled>Enviar Respostas</button>
+</div>
+
+<script>
+const options = document.getElementById('options');
+const priorityList = document.getElementById('priority-list');
+const submitBtn = document.getElementById('submit-btn');
+let selectedOptions = [];
+
+options.addEventListener('click', function(e) {
+    if (e.target.tagName === 'LI') {
+        const value = e.target.getAttribute('data-value');
+        const text = e.target.textContent;
+        
+        selectedOptions.push({value, text});
+        e.target.remove();
+        
+        updatePriorityList();
+        
+        if (selectedOptions.length === 12) {
+            submitBtn.disabled = false;
+        }
+    }
+});
+
+function updatePriorityList() {
+    priorityList.innerHTML = '';
+    selectedOptions.forEach(option => {
+        const li = document.createElement('li');
+        li.textContent = option.text;
+        priorityList.appendChild(li);
+    });
+}
+
+submitBtn.addEventListener('click', function() {
+    const subject = encodeURIComponent('Respostas do Formulário');
+    let body = encodeURIComponent('Respostas do formulário:\n\n');
+    
+    selectedOptions.forEach((option, index) => {
+        body += encodeURIComponent(`${index + 1}. ${option.text}\n`);
+    });
+    
+    window.location.href = `mailto:contato@personalmap.com.br?subject=${subject}&body=${body}`;
+});
+</script>
+</body></html>
